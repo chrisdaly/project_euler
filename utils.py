@@ -1,14 +1,13 @@
 import time
 
-def timeit(f):
 
-    def timed(*args, **kw):
-
-        ts = time.time()
-        result = f(*args, **kw)
-        te = time.time()
-
-        print('func:%r args:[%r, %r] took: %2.4f sec' % (f.__name__, args, kw, te-ts))
+def timer(func):
+    @functools.wraps(func)
+    def wrapper_timer(*args, **kwargs):
+        start_time = time.perf_counter()
+        result = func(*args, **kwargs)
+        end_time = time.perf_counter()
+        run_time = end_time - start_time
+        print(f"Finished {func.__name__!r} in {run_time:.4f} secs")
         return result
-
-    return timed
+    return wrapper_timer
